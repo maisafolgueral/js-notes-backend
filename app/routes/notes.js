@@ -26,6 +26,15 @@ router.get("/:id", withAuth, async function (req, res) {
   }
 });
 
+router.get("/", withAuth, async (req, res) => {
+  try {
+    let notes = await Note.find({ author: req.user._id });
+    res.json(notes);
+  } catch (error) {
+    res.status(500).json({ error: error });
+  }
+});
+
 const isOwner = (user, note) => {
   if (JSON.stringify(user._id) == JSON.stringify(note.author._id)) return true;
   else return false;
