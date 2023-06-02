@@ -5,8 +5,8 @@ const jwt = require("jsonwebtoken");
 
 const User = require("../models/user.js");
 
-const WithAuth = (req, res, next) => {
-  const token = req.headers["x-access-token"];
+const withAuth = (req, res, next) => {
+  let token = req.headers["x-access-token"];
   if (!token) {
     res.status(401).json({ error: "Unauthorized: No token provided" });
   } else {
