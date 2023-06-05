@@ -15,7 +15,7 @@ router.post("/", withAuth, async (req, res) => {
   }
 });
 
-router.get("/:id", withAuth, async function (req, res) {
+router.get("/:id", withAuth, async (req, res) => {
   try {
     const { id } = req.params;
     let note = await Note.findById(id);
@@ -43,14 +43,29 @@ router.put("/:id", withAuth, async (req, res) => {
     let note = await Note.findById(id);
     if (isOwner(req.user, note)) {
       let note = await Note.findOneAndUpdate(
-        {_id: id},
-        { $set: { title: title, body: body}},
-        { upsert: true, 'new': true }
-      )
+        { _id: id },
+        { $set: { title: title, body: body } },
+        { upsert: true, new: true }
+      );
       res.json(note);
     } else res.status(403).json({ error: "Permission denied" });
   } catch (err) {
     res.status(500).send({ error: "Problem to update a note." });
+  }
+});
+
+router.delete("/:id", withAuth, async (req, res) => {
+  const { id } = req.params;
+  try {
+    let note = await Note.findById(id);
+    if (isOwner(req.user, note)) {
+      await Note.deleteOne({ _id: id });
+      res.json({ message: "OK" }).status(204);
+    } else {
+      res.status(403).json({ error: "Permission denied" });
+    }
+  } catch (error) {
+    res.status(500).json({ error: "Problem to delete a note" });
   }
 });
 
