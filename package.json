@@ -6,6 +6,9 @@
     "start": "node ./bin/www",
     "dev": "set PORT=3001 && nodemon start"
   },
+  "engines": {
+    "node": "16.18.0"
+  },
   "dependencies": {
     "bcrypt": "^5.1.0",
     "cookie-parser": "~1.4.4",
